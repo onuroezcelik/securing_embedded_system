@@ -2,6 +2,12 @@
 
 This project focuses on analyzing and securing an embedded system architecture consisting of multiple devices connected to a central server. The system enables data collection and remote administrative control, including configuration updates and software management.
 
+## Architecture Overview
+
+The following diagram illustrates the system architecture:
+
+![Architecture Diagram](step1_architecture.jpeg)
+
 ## Getting Started
 
 Instructions for how to get a copy of the project running on your local machine.
