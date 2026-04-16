@@ -64,15 +64,12 @@ Administrative actions include:
 
 The following assets were identified as relevant for the simplified threat model:
 
-- Collected data
-Data collected by the embedded devices and transmitted to the server.
-- Device firmware / software
-The software running on the device, including update capability.
-- Administrative control interface
-The management communication path used by the server to configure, update, or disable devices.
+- Collected data: Data collected by the embedded devices and transmitted to the server.
+- Device firmware / software: The software running on the device, including update capability.
+- Administrative control interface: The management communication path used by the server to configure, update, or disable devices.
 
 STRIDE Analysis
-Asset 1: Collected Data
+#### Asset 1: Collected Data
 
 | STRIDE Category            | Threat                                                                                    | Mitigation |
 | -------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -83,7 +80,7 @@ Asset 1: Collected Data
 | **Denial of Service**      | Attackers flood the server or device communication path, preventing data delivery.        | Apply rate limiting, input validation, and retry/backoff mechanisms. |
 | **Elevation of Privilege** | N/A                                                                                       | N/A |
 
-Asset 2: Device Firmware / Software
+#### Asset 2: Device Firmware / Software
 | STRIDE Category            | Threat                                                                                         | Mitigation                                                                                   |
 | -------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | **Spoofing**               | An attacker pretends to be the trusted update server and delivers a malicious firmware update. | Authenticate the server and use signed firmware images.                                      |
@@ -93,7 +90,7 @@ Asset 2: Device Firmware / Software
 | **Denial of Service**      | A corrupted or malicious update makes the device unavailable or non-functional.                | Use rollback protection, A/B partitioning, and update validation before activation.          |
 | **Elevation of Privilege** | An attacker exploits a software flaw to gain privileged execution on the device.               | Apply least privilege, harden services, validate inputs, and keep software patched.          |
 
-Asset 3: Administrative Control Interface
+#### Asset 3: Administrative Control Interface
 | STRIDE Category            | Threat                                                                                              | Mitigation                                                                                           |
 | -------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | **Spoofing**               | An attacker impersonates the server and sends unauthorized admin commands to a device.              | Use mutual authentication and strong credential management.                                          |
@@ -107,22 +104,22 @@ Asset 3: Administrative Control Interface
 
 The main risks in this architecture are:
 
-unauthorized devices sending false data
-interception or modification of collected data
-malicious or unauthorized firmware updates
-abuse of the administrative interface to reconfigure, disable, or compromise devices
+- unauthorized devices sending false data
+- interception or modification of collected data
+- malicious or unauthorized firmware updates
+- abuse of the administrative interface to reconfigure, disable, or compromise devices
 
 #### Recommended Mitigations
 
 The most important mitigations for this system are:
 
-Mutual authentication between devices and server
-Encrypted communication for both data and administrative channels
-Integrity protection for messages and firmware
-Signed firmware updates and secure boot
-Audit logging for data transfer and administrative actions
-Role-based access control for admin operations
-Availability protections such as rate limiting and monitoring
+- Mutual authentication between devices and server
+- Encrypted communication for both data and administrative channels
+- Integrity protection for messages and firmware
+- Signed firmware updates and secure boot
+- Audit logging for data transfer and administrative actions
+- Role-based access control for admin operations
+- Availability protections such as rate limiting and monitoring
 
 ### Step 2
 
