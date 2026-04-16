@@ -138,10 +138,11 @@ The source code was reviewed to identify plaintext and hardcoded passwords.
 
 3. **Plaintext passwords in users.txt**
    
-   User credentials were stored in plaintext:
+   User credentials were stored in plaintext, the hardcoded password in `login.c` is added to this file.
    ```
    user:password
    admin:s3CretP4ssword
+   superuser:h4rdc0d3d
    ```
 
 ### Step 4
