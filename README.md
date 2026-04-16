@@ -1,29 +1,27 @@
-# README Template
+# Securing an Embedded System
 
-Below is a template provided for use when building your README file for students.
-
-# Project Title
-
-Project description goes here.
+This project focuses on analyzing and securing an embedded system architecture consisting of multiple devices connected to a central server. The system enables data collection and remote administrative control, including configuration updates and software management.
 
 ## Getting Started
 
 Instructions for how to get a copy of the project running on your local machine.
 
+```bash
+git clone https://github.com/onuroezcelik/securing_embedded_system.git
+```
+
 ### Dependencies
 
-```
-Examples here
-```
+No external dependencies are required for this project.
 
 ### Installation
 
 Step by step explanation of how to get a dev environment running.
 
-List out the steps
+1. Clone the repository:
 
-```
-Give an example here
+```bash
+git clone https://github.com/onuroezcelik/securing_embedded_system.git
 ```
 
 ## Testing
@@ -38,6 +36,8 @@ Explain what each test does and why
 Examples here
 ```
 ## Project Instructions
+
+### STEP 1
 
 ### Simplified Threat Model
 #### Scope
@@ -117,6 +117,18 @@ Signed firmware updates and secure boot
 Audit logging for data transfer and administrative actions
 Role-based access control for admin operations
 Availability protections such as rate limiting and monitoring
+
+### Step 2
+
+### Step 3
+
+### Step 4
+
+### Step 5
+
+### Step 6
+
+### Step 7
 
 ## Built With
 
