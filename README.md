@@ -121,7 +121,28 @@ The matrix follows the principle of least privilege, so each role only has the p
 2. **System Administrator** has full administrative access to manage devices, update software, and disable devices when necessary.
 3. **Maintenance Operator** can perform software updates but does not have access to collected data or other admin functions.
 
-### Step 3
+### Step 3 - Secure Handling of Sensitive Information
+
+The source code was reviewed to identify plaintext and hardcoded passwords.
+
+#### Issues Found
+
+1. **Hardcoded password in `login.c`**
+
+   The following code is deleted from login.c
+   ```c
+   if (strcmp(username, "superuser") == 0 && strcmp(password, "h4rdc0d3d") == 0) {
+       return 1;
+   }
+   ```
+
+3. **Plaintext passwords in users.txt**
+   
+   User credentials were stored in plaintext:
+   ```
+   user:password
+   admin:s3CretP4ssword
+   ```
 
 ### Step 4
 
