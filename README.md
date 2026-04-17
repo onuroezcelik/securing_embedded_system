@@ -123,11 +123,12 @@ The matrix follows the principle of least privilege, so each role only has the p
 
 ### Step 3 - Secure Handling of Sensitive Information
 
-The source code was reviewed to identify plaintext and hardcoded passwords.
+- Hardcoded credentials were removed from `login.c`
+- Plaintext passwords were moved to a temporary `users.txt` file
+- Credentials are stored as salted hashes in `hashed_users.txt`
+- Login verifies passwords by hashing the input with the stored salt
 
-#### Issues Found
-
-1. **Hardcoded password in `login.c`**
+1. **Hardcoded credentials removed from `login.c`**
 
    The following code is deleted from login.c
    ```c
@@ -136,13 +137,52 @@ The source code was reviewed to identify plaintext and hardcoded passwords.
    }
    ```
 
-3. **Plaintext passwords in users.txt**
+2. **Plaintext passwords in users.txt is updated.**
    
    User credentials were stored in plaintext, the hardcoded password in `login.c` is added to this file.
    ```
    user:password
    admin:s3CretP4ssword
    superuser:h4rdc0d3d
+   ```
+ 3. **Update login.c to use salt + hash**
+
+    Update the name of input file:
+   ```
+    #define FILE_USERS "hashed_users.txt"
+   ```
+
+   Parse username:salt:hash:
+   ```
+   char* token = strtok(line, ":");
+   strcpy(file_username, token);
+   
+   token = strtok(NULL, ":");
+   strcpy(salt_hex, token);
+   
+   token = strtok(NULL, ":");
+   strcpy(stored_hash, token);
+   ```
+
+   Convert salt and verify via hashing:
+   ```
+   hex_to_bytes(salt_hex, salt, SALT_LENGTH);
+   hash_password(password, salt, computed_hash);
+   
+   if (strcmp(computed_hash, stored_hash) == 0) {
+       return 1;
+   }
+   ```
+
+4. **Run hashing before login (automation)**
+
+   The hashing process is executed before login starts:
+   # start.sh
+   ```
+   gcc generate_hashed_users.c hash_utils.c -o generate_hashed_users -lcrypto
+   ./generate_hashed_users
+   
+   /app/login
    ```
 
 ### Step 4
