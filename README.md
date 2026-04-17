@@ -30,17 +30,6 @@ Step by step explanation of how to get a dev environment running.
 git clone https://github.com/onuroezcelik/securing_embedded_system.git
 ```
 
-## Testing
-
-Explain the steps needed to run any automated tests
-
-### Break Down Tests
-
-Explain what each test does and why
-
-```
-Examples here
-```
 ## Project Instructions
 
 ### STEP 1
@@ -186,6 +175,15 @@ The matrix follows the principle of least privilege, so each role only has the p
    ```
 
 ### Step 4
+
+A. Buffer overflow vulnerability
+```
+Vulnerable code
+
+char command[MAX_COMMAND_LENGTH];
+...
+scanf("%s", command);
+```
 
 ### Step 5
 
