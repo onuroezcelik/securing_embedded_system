@@ -125,18 +125,17 @@ The matrix follows the principle of least privilege, so each role only has the p
        return 1;
    }
    ```
-
 2. **Plaintext passwords in users.txt is updated.**
-   
+
    User credentials were stored in plaintext, the hardcoded password in `login.c` is added to this file.
    ```
    user:password
    admin:s3CretP4ssword
    superuser:h4rdc0d3d
    ```
- 3. **Update login.c to use salt + hash**
+3. **Update login.c to use salt + hash**
 
-    Update the name of input file:
+   Update the name of input file:
    ```
     #define FILE_USERS "hashed_users.txt"
    ```
@@ -163,10 +162,10 @@ The matrix follows the principle of least privilege, so each role only has the p
    }
    ```
 
-4. **Run hashing before login (automation)**
+5. **Run hashing before login (automation)**
 
    The hashing process is executed before login starts:
-   # start.sh
+   #### start.sh
    ```
    gcc generate_hashed_users.c hash_utils.c -o generate_hashed_users -lcrypto
    ./generate_hashed_users
@@ -176,14 +175,9 @@ The matrix follows the principle of least privilege, so each role only has the p
 
 ### Step 4
 
-A. Buffer overflow vulnerability
-```
-Vulnerable code
+#### Buffer Overflow Vulnerability
 
-char command[MAX_COMMAND_LENGTH];
-...
-scanf("%s", command);
-```
+![Buffer Overflow Exploitation](Buffer_Overflow_Exploitation.png)
 
 ### Step 5
 
