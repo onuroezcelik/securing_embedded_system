@@ -186,6 +186,20 @@ Result
 - GDB reported the crash inside the hash_password function.
 - The stack trace confirms memory corruption caused by the oversized input.
 
+##### Buffer Overflow Fix
+The issue was caused by the unsafe use of strcpy, which does not perform bounds checking. This allowed potential buffer overflow when the input exceeded the allocated buffer size.
+
+```
+strcpy(salted_password + SALT_LENGTH, password);
+```
+
+strcpy was replaced with a bounded safe alternative:
+
+```
+strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH);
+```
+
+
 ### Step 5
 
 ### Step 6
