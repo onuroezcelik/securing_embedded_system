@@ -228,6 +228,8 @@ void hash_password(const char* password, const unsigned char* salt, char* hashed
     bytes_to_hex(hash, SHA256_DIGEST_LENGTH, hashed_password);
 }
 ```
+![Fixed Buffer Overflow](Fixed_Buffer_Overflow.png)
+
 
 ### Step 5
 
