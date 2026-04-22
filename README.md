@@ -177,7 +177,14 @@ The matrix follows the principle of least privilege, so each role only has the p
 
 #### Buffer Overflow Vulnerability
 
+A long password input was provided during login:
+
 ![Buffer Overflow Exploitation](Buffer_Overflow_Exploitation.png)
+
+Result
+- The program crashed with a segmentation fault (SIGSEGV).
+- GDB reported the crash inside the hash_password function.
+- The stack trace confirms memory corruption caused by the oversized input.
 
 ### Step 5
 
