@@ -187,18 +187,47 @@ Result
 - The stack trace confirms memory corruption caused by the oversized input.
 
 ##### Buffer Overflow Fix
-The issue was caused by the unsafe use of strcpy, which does not perform bounds checking. This allowed potential buffer overflow when the input exceeded the allocated buffer size.
 
-```
-strcpy(salted_password + SALT_LENGTH, password);
-```
+1. Increased buffer size
+   The buffer was resized to safely accommodate:
+   - Salt
+   - Password
+   - Null terminator
 
-strcpy was replaced with a bounded safe alternative:
+   ```
+   char salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH + 1];
+   ```
 
-```
-strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH);
-```
+3. Replaced unsafe function
+   strcpy was replaced with a bounded alternative:
 
+   ```
+   strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH);
+   ```
+
+3. Ensured safe string termination
+
+   ```
+   salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH] = '\0';
+   ```
+
+Corrected function in hash_utils.c
+```
+void hash_password(const char* password, const unsigned char* salt, char* hashed_password) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+
+    char salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH + 1];
+
+    memcpy(salted_password, salt, SALT_LENGTH);
+
+    strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH);
+    salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH] = '\0';
+
+    SHA256((unsigned char*)salted_password, strlen(salted_password), hash);
+
+    bytes_to_hex(hash, SHA256_DIGEST_LENGTH, hashed_password);
+}
+```
 
 ### Step 5
 
