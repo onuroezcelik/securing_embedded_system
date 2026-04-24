@@ -135,42 +135,69 @@ The matrix follows the principle of least privilege, so each role only has the p
    ```
 3. **Update login.c to use salt + hash**
 
-   Update the name of input file:
+   A) hash_utils.h is added
+
+   B) Update the name of input file:
    ```
     #define FILE_USERS "hashed_users.txt"
    ```
 
-   Parse username:salt:hash:
+   C) Parses a colon-separated line in the format username:salt_hex:stored_hash 
+   and copies each field into its corresponding buffer if present.
    ```
    char* token = strtok(line, ":");
-   strcpy(file_username, token);
+   if (token != NULL) {
+      strcpy(file_username, token);
    
-   token = strtok(NULL, ":");
-   strcpy(salt_hex, token);
+      token = strtok(NULL, ":");
+      if (token != NULL) {
+          strcpy(salt_hex, token);
    
-   token = strtok(NULL, ":");
-   strcpy(stored_hash, token);
-   ```
-
-   Convert salt and verify via hashing:
-   ```
-   hex_to_bytes(salt_hex, salt, SALT_LENGTH);
-   hash_password(password, salt, computed_hash);
-   
-   if (strcmp(computed_hash, stored_hash) == 0) {
-       return 1;
+          token = strtok(NULL, ":");
+          if (token != NULL) {
+              strcpy(stored_hash, token);
+          }
+      }
    }
    ```
 
-5. **Run hashing before login (automation)**
-
-   The hashing process is executed before login starts:
-   #### start.sh
+   D) Verifies the entered username and password by matching the username
+   and comparing the computed salted hash against the stored hash.
    ```
-   gcc generate_hashed_users.c hash_utils.c -o generate_hashed_users -lcrypto
-   ./generate_hashed_users
+   if (strcmp(username, file_username) == 0) {
    
-   /app/login
+      unsigned char salt[2];
+      char computed_hash[65];
+      
+      hex_to_bytes(salt_hex, salt, 2);
+      
+      // hash input password + salt
+      hash_password(password, salt, computed_hash);
+      
+      // compare hashes (NOT plaintext)
+      if (strcmp(computed_hash, stored_hash) == 0) {
+          fclose(file);
+          return 1;
+      }
+   }
+   ```
+
+4. **Update dockerfile**
+
+   Compile the hash_utils.c and generate_hashed_users.c
+   ```
+   # Compile generator
+   RUN gcc /app/generate_hashed_users.c /app/hash_utils.c -o /app/generate_hashed_users -lssl -lcrypto
+   
+   # Compile login program
+   RUN gcc /app/login.c /app/hash_utils.c -o /app/login -lssl -lcrypto
+   ```
+
+5. **Update start.sh**
+
+   Generate hashed users before login by adding:
+   ```
+   /app/generate_hashed_users
    ```
 
 ### Step 4
