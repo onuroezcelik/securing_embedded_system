@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Function to handle termination signals
 term_handler() {
@@ -9,10 +10,9 @@ term_handler() {
 # Trap termination signals
 trap 'term_handler' INT TERM
 
-#run generate hashed users
+# Generate hashed users before login
 /app/generate_hashed_users
 
 while true; do
-  gdb -ex "run" -ex "quit" -ex "bt" --args /app/login
-#  /app/login
+  /app/login
 done

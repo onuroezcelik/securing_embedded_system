@@ -9,7 +9,6 @@
 #define MAX_HASH_LENGTH 65
 #define SALT_LENGTH 2
 
-#define COUNTER "0"
 #define FILE_INPUT "users.txt"
 #define FILE_OUTPUT "hashed_users.txt"
 
@@ -66,7 +65,7 @@ int main() {
         bytes_to_hex(salt, SALT_LENGTH, salt_hex);
 
         // Write to output file
-        fprintf(output_file, "%s:%s:%s:%s\n", username, salt_hex, hashed_password, COUNTER);
+        fprintf(output_file, "%s:%s:%s\n", username, salt_hex, hashed_password);
     }
 
     fclose(input_file);
