@@ -23,7 +23,7 @@ void hash_password(const char* password, const unsigned char* salt, char* hashed
     // Prepend the salt to the password
     memcpy(salted_password, salt, SALT_LENGTH);
     strcpy(salted_password + SALT_LENGTH, password);
-
+    
     // Hash the salted password
     SHA256((unsigned char*)salted_password, strlen(salted_password), hash);
 
