@@ -135,15 +135,17 @@ The matrix follows the principle of least privilege, so each role only has the p
    ```
 3. **Update login.c to use salt + hash**
 
-   A) hash_utils.h is added
+   **A) hash_utils.h is added**
 
-   B) Update the name of input file:
+   **B) Update the name of input file:**
+   
    ```
     #define FILE_USERS "hashed_users.txt"
    ```
 
-   C) Parses a colon-separated line in the format username:salt_hex:stored_hash 
-   and copies each field into its corresponding buffer if present.
+   **C) Parses a colon-separated line in the format username:salt_hex:stored_hash 
+   and copies each field into its corresponding buffer if present.**
+   
    ```
    char* token = strtok(line, ":");
    if (token != NULL) {
@@ -161,8 +163,9 @@ The matrix follows the principle of least privilege, so each role only has the p
    }
    ```
 
-   D) Verifies the entered username and password by matching the username
-   and comparing the computed salted hash against the stored hash.
+   **D) Verifies the entered username and password by matching the username
+   and comparing the computed salted hash against the stored hash.**
+   
    ```
    if (strcmp(username, file_username) == 0) {
    
@@ -182,9 +185,10 @@ The matrix follows the principle of least privilege, so each role only has the p
    }
    ```
 
-4. **Update dockerfile**
+5. **Update dockerfile**
 
    Compile the hash_utils.c and generate_hashed_users.c
+   
    ```
    # Compile generator
    RUN gcc /app/generate_hashed_users.c /app/hash_utils.c -o /app/generate_hashed_users -lssl -lcrypto
@@ -193,7 +197,7 @@ The matrix follows the principle of least privilege, so each role only has the p
    RUN gcc /app/login.c /app/hash_utils.c -o /app/login -lssl -lcrypto
    ```
 
-5. **Update start.sh**
+7. **Update start.sh**
 
    Generate hashed users before login by adding:
    ```
@@ -220,15 +224,17 @@ Program received signal SIGSEGV, Segmentation fault.
 32      }
 ```
 
-##### Buffer Overflow Fix
+#### Buffer Overflow Fix
 
-Fix 1: Increase Buffer Size
+**Fix 1: Increase Buffer Size**
+
 Increase the buffer to safely fit both salt and password:
 ```
 char salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH];
 ```
 
-Fix 2: Use a Safe Copy Function
+**Fix 2: Use a Safe Copy Function**
+
 Replace unsafe strcpy with a bounded copy:
 
 ```
@@ -249,12 +255,24 @@ After the fix:
 #### Lockout Mechanism Implementation
 
 Features implemented in login.c:
-A) Failed login handling
+
+**A) Failed login handling**
 
 On each login attempt with wrong password:
 The counter is incremented and the counter in "hashed_user.txt" file is updated via the function "update_counter(username, counter)".
 After 3rd attempt, sleep(5) is triggered.
 if the user is not found, it is also indicated with a warning, then the app exits. 
+
+**B) Lockout policy**
+
+If counter >= 3:
+User is locked for 5 seconds by implementing the function sleep(5)
+Further login attempts are blocked during this period
+
+**C) Successful login reset**
+
+On successful authentication:
+Counter is reset to 0 and stored back in hashed_users.txt
 
 ```
 if (strcmp(username, file_username) == 0) {
@@ -284,22 +302,6 @@ if (strcmp(username, file_username) == 0) {
    return 0;
 }
 ```
-
-B) Lockout policy
-
-If counter >= 3:
-User is locked for 5 seconds by implementing the function sleep(5)
-Further login attempts are blocked during this period
-
-C) Successful login reset
-
-On successful authentication:
-Counter is reset to 0 and stored back in hashed_users.txt
-
-```
-update_counter(username, 0);
-```
-
 
 ### Step 5
 
