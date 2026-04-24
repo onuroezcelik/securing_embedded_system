@@ -213,6 +213,13 @@ Result
 - GDB reported the crash inside the hash_password function.
 - The stack trace confirms memory corruption caused by the oversized input.
 
+```
+Program received signal SIGSEGV, Segmentation fault.
+0x000000000040165d in hash_password (password=0x7ffd076bf790 'a' <repeats 49 times>, salt=0x7ffd076bf5ce "\035\270e356cc860ff8edecf71e3cd5a9405d053b8dba33019bdbf529a0388c2c0a8666", 
+    hashed_password=0x7ffd076bf580 "f03797a8d799bf62ce5fcdccdeaee94c16cd5b75b4eaabcafd17549429728e75") at hash_utils.c:32
+32      }
+```
+
 ##### Buffer Overflow Fix
 
 1. Increased buffer size
