@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "hash_utils.h"
+#include <unistd.h>
 
 #define MAX_LINE_LENGTH 200
 #define MAX_USERNAME_LENGTH 50
@@ -26,6 +27,32 @@ void hex_to_bytes(const char* hex, unsigned char* bytes, size_t len) {
     }
 }
 
+void update_counter(const char* username, int counter) {
+    FILE* file = fopen(FILE_USERS, "r+");
+    if (!file) return;
+
+    char line[MAX_LINE_LENGTH];
+    long pos;
+
+    char u[MAX_USERNAME_LENGTH];
+    char salt[10];
+    char hash[65];
+    int c;
+
+    while ((pos = ftell(file)), fgets(line, sizeof(line), file)) {
+        sscanf(line, "%[^:]:%[^:]:%[^:]:%d", u, salt, hash, &c);
+
+        if (strcmp(u, username) == 0) {
+            fseek(file, pos, SEEK_SET);
+            fprintf(file, "%s:%s:%s:%d\n", u, salt, hash, counter);
+            fflush(file);
+            break;
+        }
+    }
+
+    fclose(file);
+}
+
 // Function to check if username and password match an entry in users.txt
 int check_login(const char* username, const char* password) {
 
@@ -39,6 +66,7 @@ int check_login(const char* username, const char* password) {
     char file_username[MAX_USERNAME_LENGTH];
     char salt_hex[10];
     char stored_hash[65];
+    int counter;
 
     while (fgets(line, sizeof(line), file)) {
         // Remove the newline character
@@ -58,6 +86,9 @@ int check_login(const char* username, const char* password) {
                 if (token != NULL) {
                     strcpy(stored_hash, token);
                 }
+                
+                token = strtok(NULL, ":");
+                counter = token ? atoi(token) : 0;
             }
         }
 
@@ -76,11 +107,28 @@ int check_login(const char* username, const char* password) {
             // compare hashes (NOT plaintext)
             if (strcmp(computed_hash, stored_hash) == 0) {
                 fclose(file);
+                update_counter(username, 0);
                 return 1;
+            }else{
+                printf("number of failed attempt= %d\n", counter+1);
+                counter++;
+                update_counter(username, counter);
+                if (counter >= 3){
+                    printf("Account locked. Try again in 5 seconds later.\n");
+                    sleep(5);
+                    fclose(file);
+                    return 0;
+                }            
+                fclose(file);
+                return 0;
             }
+        }else{
+            printf("User not found\n");
+            fclose(file);
+            return 0;
         }
     }
-
+    
     fclose(file);
     return 0;  // Login failed
 }
