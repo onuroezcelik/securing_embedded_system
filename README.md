@@ -236,7 +236,69 @@ strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH - 1);
 salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH - 1] = '\0';
 ```
 
+#### Verification of Buffer Overflow Fix
+
+After the fix:
+
+- Long password inputs no longer cause crashes
+- Program executes normally
+- No memory corruption observed
+
 ![Fixed Buffer Overflow](Fixed_Buffer_Overflow.png)
+
+#### Lockout Mechanism Implementation
+
+Features implemented in login.c:
+A) Failed login handling
+
+On each login attempt with wrong password:
+The counter is incremented and the counter in "hashed_user.txt" file is updated via the function "update_counter(username, counter)".
+After 3rd attempt, sleep(5) is triggered.
+if the user is not found, it is also indicated with a warning, then the app exits. 
+
+```
+if (strcmp(username, file_username) == 0) {
+
+...
+
+   if (strcmp(computed_hash, stored_hash) == 0) {
+       fclose(file);
+       update_counter(username, 0);
+       return 1;
+   }else{
+       printf("number of failed attempt= %d\n", counter+1);
+       counter++;
+       update_counter(username, counter);
+       if (counter >= 3){
+           printf("Account locked. Try again in 5 seconds later.\n");
+           sleep(5);
+           fclose(file);
+           return 0;
+       }            
+       fclose(file);
+       return 0;
+   }
+}else{
+   printf("User not found\n");
+   fclose(file);
+   return 0;
+}
+```
+
+B) Lockout policy
+
+If counter >= 3:
+User is locked for 5 seconds by implementing the function sleep(5)
+Further login attempts are blocked during this period
+
+C) Successful login reset
+
+On successful authentication:
+Counter is reset to 0 and stored back in hashed_users.txt
+
+```
+update_counter(username, 0);
+```
 
 
 ### Step 5
