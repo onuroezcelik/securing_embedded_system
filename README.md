@@ -222,46 +222,20 @@ Program received signal SIGSEGV, Segmentation fault.
 
 ##### Buffer Overflow Fix
 
-1. Increased buffer size
-   The buffer was resized to safely accommodate:
-   - Salt
-   - Password
-   - Null terminator
-
-   ```
-   char salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH + 1];
-   ```
-
-3. Replaced unsafe function
-   strcpy was replaced with a bounded alternative:
-
-   ```
-   strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH);
-   ```
-
-3. Ensured safe string termination
-
-   ```
-   salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH] = '\0';
-   ```
-
-Corrected function in hash_utils.c
+Fix 1: Increase Buffer Size
+Increase the buffer to safely fit both salt and password:
 ```
-void hash_password(const char* password, const unsigned char* salt, char* hashed_password) {
-    unsigned char hash[SHA256_DIGEST_LENGTH];
-
-    char salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH + 1];
-
-    memcpy(salted_password, salt, SALT_LENGTH);
-
-    strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH);
-    salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH] = '\0';
-
-    SHA256((unsigned char*)salted_password, strlen(salted_password), hash);
-
-    bytes_to_hex(hash, SHA256_DIGEST_LENGTH, hashed_password);
-}
+char salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH];
 ```
+
+Fix 2: Use a Safe Copy Function
+Replace unsafe strcpy with a bounded copy:
+
+```
+strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH - 1);
+salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH - 1] = '\0';
+```
+
 ![Fixed Buffer Overflow](Fixed_Buffer_Overflow.png)
 
 
