@@ -32,7 +32,7 @@ git clone https://github.com/onuroezcelik/securing_embedded_system.git
 
 ## Project Instructions
 
-### STEP 1
+## STEP 1
 
 ### Simplified Threat Model
 
@@ -93,7 +93,7 @@ Main risks include:
 - access control
 - logging
 
-### Step 2
+## Step 2
 #### User Role Matrix
 
 Based on the architecture, the following roles and functions were identified.
@@ -110,7 +110,7 @@ The matrix follows the principle of least privilege, so each role only has the p
 2. **System Administrator** has full administrative access to manage devices, update software, and disable devices when necessary.
 3. **Maintenance Operator** can perform software updates but does not have access to collected data or other admin functions.
 
-### Step 3 - Secure Handling of Sensitive Information
+## Step 3 - Secure Handling of Sensitive Information
 
 - Hardcoded credentials were removed from `login.c`
 - Plaintext passwords were moved to a temporary `users.txt` file
@@ -204,7 +204,7 @@ The matrix follows the principle of least privilege, so each role only has the p
    /app/generate_hashed_users
    ```
 
-### Step 4
+## Step 4
 
 #### Buffer Overflow Vulnerability
 
@@ -303,7 +303,7 @@ if (strcmp(username, file_username) == 0) {
 }
 ```
 
-### Step 5
+## Step 5
 
 #### Identify and disable legacy services
 
@@ -402,9 +402,9 @@ check_sensors(); // never executed
 Login functionality works correctly
 
 
-### Step 6
+## Step 6
 
-### Step 7
+## Step 7
 
 ## Built With
 
