@@ -326,32 +326,32 @@ Network scanning was performed using:
 nmap localhost
 ```
 
-Result
-The scan revealed that a legacy service was running:
+Result:
+
+This indicates that the FTP service (proftpd) was active.
 
 ```
 21/tcp open  ftp
 ```
-
-This indicates that the FTP service (proftpd) was active.
 
 ![nmap](nmap.png)
 
 To reduce the attack surface, all legacy services were removed from the Dockerfile:
 
 Removed components:
-proftpd (FTP service)
-telnetd (Telnet service)
-openbsd-inetd
-xinetd
+- proftpd (FTP service)
+- telnetd (Telnet service)
+- openbsd-inetd
+- xinetd
+
 Related configuration files:
-xinetd.conf
-telnetd
-ftpd
-rlogind
+- xinetd.conf
+- telnetd
+- ftpd
+- rlogind
 
 Service startup commands:
-service xinetd start && /usr/sbin/proftpd
+- service xinetd start && /usr/sbin/proftpd
 
 #### Verification
 
@@ -400,8 +400,6 @@ check_sensors(); // never executed
 
 #### Functional Verification
 Login functionality works correctly
-
-![Functional Verification](functional_Verification.png)
 
 
 ### Step 6
