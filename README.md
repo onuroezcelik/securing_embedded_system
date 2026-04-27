@@ -305,6 +305,105 @@ if (strcmp(username, file_username) == 0) {
 
 ### Step 5
 
+#### Identify and disable legacy services
+
+The container was built and executed using:
+
+```
+docker build -t project_step5 .
+docker run -it --name step5 project_step5
+```
+
+A second terminal was used to access the container:
+
+```
+docker exec -it step5 /bin/bash
+```
+
+Network scanning was performed using:
+
+```
+nmap localhost
+```
+
+Result
+The scan revealed that a legacy service was running:
+
+```
+21/tcp open  ftp
+```
+
+This indicates that the FTP service (proftpd) was active.
+
+![nmap](nmap.png)
+
+To reduce the attack surface, all legacy services were removed from the Dockerfile:
+
+Removed components:
+proftpd (FTP service)
+telnetd (Telnet service)
+openbsd-inetd
+xinetd
+Related configuration files:
+xinetd.conf
+telnetd
+ftpd
+rlogind
+
+Service startup commands:
+service xinetd start && /usr/sbin/proftpd
+
+#### Verification
+
+After rebuilding and running the updated container:
+
+A new scan was performed:
+
+```
+nmap localhost
+```
+
+Result:
+All 1000 scanned ports are closed
+
+![nmap_verified](nmap_verified.png)
+
+#### Remove Non-Production, Dead, and Unused Code
+
+Findings
+
+The source code contained:
+
+- Hardcoded credentials (non-production backdoor)
+- Unused functions
+- Unreachable code
+
+Actions Taken
+
+Removed hardcoded login:
+
+```
+if (strcmp(username, "superuser") == 0 && strcmp(password, "h4rdc0d3d") == 0)
+```
+
+Removed unused functions:
+- check_sensors()
+- compare_values()
+- debug_mode()
+
+Removed unreachable code:
+
+```
+return 1;
+check_sensors(); // never executed
+```
+
+#### Functional Verification
+Login functionality works correctly
+
+![Functional Verification](functional_Verification.png)
+
+
 ### Step 6
 
 ### Step 7
