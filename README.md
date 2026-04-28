@@ -425,7 +425,7 @@ On the client side, the received package was extracted and verified using a cust
 
 Only if all checks pass, the update is considered valid and accepted.
 
-![verify_update](verify_update.png)
+![verify_update](step7/verify_update.png)
 
 ## License
 This project is based on educational materials provided by Udacity.
