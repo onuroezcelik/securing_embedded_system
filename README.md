@@ -24,6 +24,9 @@ The project relies on the following tools and libraries:
 - OpenSSL (for TLS, certificate handling, and cryptographic operations)
 - GCC (for compiling C programs)
 
+## Testing
+This project was developed and tested on a Windows environment using Docker.
+
 ## Project Instructions
 
 ## STEP 1 - Perform a simplified threat model
