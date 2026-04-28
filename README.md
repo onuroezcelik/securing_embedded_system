@@ -402,9 +402,39 @@ check_sensors(); // never executed
 Login functionality works correctly
 
 
-## Step 6
+## Step 6 - Establish secure communication.
 
-## Step 7
+The created files:
+- rootCA.crt and rootCA.key
+- server.key, server.csr, server.crt
+- client.key, client.csr, client.crt
+
+A file named output.txt is submitted which contains:
+- the complete output from “openssl s_client -connect server:8443 -cert client.crt -key client.key” command executed from within the client container (showing the server certificate, handshake, TLSv1.3 being used, the received software update binary etc.).
+- output from the command “cat received_update.bin |strings” including expected markers such as SOFTWAREUPDATE and CHECKSUM.
+
+## Step 7 - Perform a secure software update.
+
+A software update package was created containing the following components:
+
+software_update.bin (update binary)
+software_update.sig (digital signature)
+software_update.checksum (SHA256 checksum)
+software_update.crt (software update certificate)
+
+The software update certificate was generated and signed by the Root CA, ensuring trust in the update source.
+
+On the server side, the update binary was signed using the software update private key, and a SHA256 checksum was generated. All required files were then archived into a single software_package.zip, which was transmitted to the client.
+
+On the client side, the received package was extracted and verified using a custom program (verify_update.c). The verification process includes:
+
+- Validation of the software update certificate against the Root CA certificate
+- Verification of the digital signature using the software update certificate
+- Comparison of the SHA256 checksum to ensure file integrity
+
+Only if all checks pass, the update is considered valid and accepted.
+
+![verify_update](verify_update.png)
 
 ## Built With
 
