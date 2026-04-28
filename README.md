@@ -6,7 +6,7 @@ This project focuses on analyzing and securing an embedded system architecture c
 
 The following diagram illustrates the system architecture:
 
-![Architecture Diagram](step1_architecture.jpeg)
+![Architecture Diagram](Architecture.jpeg)
 
 ## Getting Started
 
