@@ -201,7 +201,7 @@ The matrix follows the principle of least privilege, so each role only has the p
 
 A long password input was provided during login:
 
-![Buffer Overflow Exploitation](Buffer_Overflow_Exploitation.png)
+![Buffer Overflow Exploitation](step4/Buffer_Overflow_Exploitation.png)
 
 Result
 - The program crashed with a segmentation fault (SIGSEGV).
@@ -241,7 +241,7 @@ After the fix:
 - Program executes normally
 - No memory corruption observed
 
-![Fixed Buffer Overflow](Fixed_Buffer_Overflow.png)
+![Fixed Buffer Overflow](step4/Fixed_Buffer_Overflow.png)
 
 ### Lockout Mechanism Implementation
 
