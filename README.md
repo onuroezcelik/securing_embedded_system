@@ -18,17 +18,11 @@ git clone https://github.com/onuroezcelik/securing_embedded_system.git
 
 ### Dependencies
 
-No external dependencies are required for this project.
+The project relies on the following tools and libraries:
 
-### Installation
-
-Step by step explanation of how to get a dev environment running.
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/onuroezcelik/securing_embedded_system.git
-```
+- Docker (for containerized client/server setup)
+- OpenSSL (for TLS, certificate handling, and cryptographic operations)
+- GCC (for compiling C programs)
 
 ## Project Instructions
 
