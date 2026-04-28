@@ -26,7 +26,7 @@ The project relies on the following tools and libraries:
 
 ## Project Instructions
 
-## STEP 1
+## STEP 1 - Perform a simplified threat model
 
 ### Simplified Threat Model
 
@@ -38,6 +38,7 @@ The following assets were identified:
 3. Administrative Interface – Communication channel used for device management
 
 #### STRIDE Analysis
+
 ##### Asset 1: Collected Data
 
 | Category        | Threat                     | Mitigation             |
@@ -87,8 +88,9 @@ Main risks include:
 - access control
 - logging
 
-## Step 2
-#### User Role Matrix
+## Step 2 - Define user role matrix
+
+**User Role Matrix:**
 
 Based on the architecture, the following roles and functions were identified.
 The matrix follows the principle of least privilege, so each role only has the permissions necessary for its purpose.
@@ -99,7 +101,7 @@ The matrix follows the principle of least privilege, so each role only has the p
 | **System Administrator** | Yes                 | Yes                                  | Yes                     | Yes            |
 | **Maintenance Operator** | No                  | No                                   | Yes                     | No             |
 
-#### Role Description
+**Role Description:**
 1. **Data Analyst** can only access collected data for analysis purposes.
 2. **System Administrator** has full administrative access to manage devices, update software, and disable devices when necessary.
 3. **Maintenance Operator** can perform software updates but does not have access to collected data or other admin functions.
