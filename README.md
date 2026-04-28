@@ -106,12 +106,7 @@ The matrix follows the principle of least privilege, so each role only has the p
 2. **System Administrator** has full administrative access to manage devices, update software, and disable devices when necessary.
 3. **Maintenance Operator** can perform software updates but does not have access to collected data or other admin functions.
 
-## Step 3 - Secure Handling of Sensitive Information
-
-- Hardcoded credentials were removed from `login.c`
-- Plaintext passwords were moved to a temporary `users.txt` file
-- Credentials are stored as salted hashes in `hashed_users.txt`
-- Login verifies passwords by hashing the input with the stored salt
+## Step 3 - Handling Sensitive Information
 
 1. **Hardcoded credentials removed from `login.c`**
 
@@ -202,7 +197,7 @@ The matrix follows the principle of least privilege, so each role only has the p
 
 ## Step 4
 
-#### Buffer Overflow Vulnerability
+### Buffer Overflow Vulnerability
 
 A long password input was provided during login:
 
@@ -220,7 +215,7 @@ Program received signal SIGSEGV, Segmentation fault.
 32      }
 ```
 
-#### Buffer Overflow Fix
+### Buffer Overflow Fix
 
 **Fix 1: Increase Buffer Size**
 
@@ -238,7 +233,7 @@ strncpy(salted_password + SALT_LENGTH, password, MAX_PASSWORD_LENGTH - 1);
 salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH - 1] = '\0';
 ```
 
-#### Verification of Buffer Overflow Fix
+### Verification of Buffer Overflow Fix
 
 After the fix:
 
@@ -248,7 +243,7 @@ After the fix:
 
 ![Fixed Buffer Overflow](Fixed_Buffer_Overflow.png)
 
-#### Lockout Mechanism Implementation
+### Lockout Mechanism Implementation
 
 Features implemented in login.c:
 
@@ -301,7 +296,7 @@ if (strcmp(username, file_username) == 0) {
 
 ## Step 5
 
-#### Identify and disable legacy services
+### Identify and disable legacy services
 
 The container was built and executed using:
 
@@ -349,7 +344,7 @@ Related configuration files:
 Service startup commands:
 - service xinetd start && /usr/sbin/proftpd
 
-#### Verification
+### Verification
 
 After rebuilding and running the updated container:
 
@@ -364,7 +359,7 @@ All 1000 scanned ports are closed
 
 ![nmap_verified](nmap_verified.png)
 
-#### Remove Non-Production, Dead, and Unused Code
+### Remove Non-Production, Dead, and Unused Code
 
 Findings
 
@@ -394,7 +389,7 @@ return 1;
 check_sensors(); // never executed
 ```
 
-#### Functional Verification
+### Functional Verification
 Login functionality works correctly
 
 
