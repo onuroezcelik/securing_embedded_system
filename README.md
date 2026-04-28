@@ -192,7 +192,7 @@ Update start.sh to generate hashed users before login by adding:
 /app/generate_hashed_users
 ```
 
-## STEP 4
+## STEP 4 - Handling Input
 
 ### Buffer Overflow Vulnerability
 
@@ -413,7 +413,7 @@ software_update.crt (software update certificate)
 
 The software update certificate was generated and signed by the Root CA, ensuring trust in the update source.
 
-On the server side, the update binary was signed using the software update private key, and a SHA256 checksum was generated. All required files were then archived into a single software_package.zip, which was transmitted to the client.
+On the server side, the software update binary was signed using the software update private key, a SHA256 checksum was generated, and all required files were packaged into a single software_package.zip for transmission to the client.
 
 On the client side, the received package was extracted and verified using a custom program (verify_update.c). The verification process includes:
 
