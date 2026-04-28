@@ -111,34 +111,32 @@ The matrix follows the principle of least privilege, so each role only has the p
 
 ## Step 3 - Handling Sensitive Information
 
-1. **Hardcoded credentials removed from `login.c`**
+Hardcoded credentials were removed from login.c by deleting the following code sections.
 
-   The following code is deleted from login.c
-   ```c
-   if (strcmp(username, "superuser") == 0 && strcmp(password, "h4rdc0d3d") == 0) {
-       return 1;
-   }
-   ```
-2. **Plaintext passwords in users.txt is updated.**
+```c
+if (strcmp(username, "superuser") == 0 && strcmp(password, "h4rdc0d3d") == 0) {
+    return 1;
+}
+```
 
-   User credentials were stored in plaintext, the hardcoded password in `login.c` is added to this file.
-   ```
-   user:password
-   admin:s3CretP4ssword
-   superuser:h4rdc0d3d
-   ```
-3. **Update login.c to use salt + hash**
+Plaintext passwords in users.txt were updated by adding the previously hardcoded credentials from login.c to the file.
 
-   **A) hash_utils.h is added**
+```
+user:password
+admin:s3CretP4ssword
+superuser:h4rdc0d3d
+```
 
-   **B) Update the name of input file:**
+Update login.c to use salt + hash
+
+- hash_utils.h is added.
+- Update the name of input file.
    
    ```
     #define FILE_USERS "hashed_users.txt"
    ```
 
-   **C) Parses a colon-separated line in the format username:salt_hex:stored_hash 
-   and copies each field into its corresponding buffer if present.**
+- Parses a colon-separated line in the format username:salt_hex:stored_hash and copies each field into its corresponding buffer if present.
    
    ```
    char* token = strtok(line, ":");
@@ -157,8 +155,7 @@ The matrix follows the principle of least privilege, so each role only has the p
    }
    ```
 
-   **D) Verifies the entered username and password by matching the username
-   and comparing the computed salted hash against the stored hash.**
+- Verifies the entered username and password by matching the username and comparing the computed salted hash against the stored hash.
    
    ```
    if (strcmp(username, file_username) == 0) {
@@ -179,24 +176,21 @@ The matrix follows the principle of least privilege, so each role only has the p
    }
    ```
 
-5. **Update dockerfile**
-
-   Compile the hash_utils.c and generate_hashed_users.c
+Update dockerfile to compile the hash_utils.c and generate_hashed_users.c
    
-   ```
-   # Compile generator
-   RUN gcc /app/generate_hashed_users.c /app/hash_utils.c -o /app/generate_hashed_users -lssl -lcrypto
-   
-   # Compile login program
-   RUN gcc /app/login.c /app/hash_utils.c -o /app/login -lssl -lcrypto
-   ```
+```
+# Compile generator
+RUN gcc /app/generate_hashed_users.c /app/hash_utils.c -o /app/generate_hashed_users -lssl -lcrypto
 
-7. **Update start.sh**
+# Compile login program
+RUN gcc /app/login.c /app/hash_utils.c -o /app/login -lssl -lcrypto
+```
 
-   Generate hashed users before login by adding:
-   ```
-   /app/generate_hashed_users
-   ```
+Update start.sh to generate hashed users before login by adding:
+
+```
+/app/generate_hashed_users
+```
 
 ## Step 4
 
@@ -206,7 +200,7 @@ A long password input was provided during login:
 
 ![Buffer Overflow Exploitation](step4/Buffer_Overflow_Exploitation.png)
 
-Result
+Result:
 - The program crashed with a segmentation fault (SIGSEGV).
 - GDB reported the crash inside the hash_password function.
 - The stack trace confirms memory corruption caused by the oversized input.
@@ -238,11 +232,7 @@ salted_password[SALT_LENGTH + MAX_PASSWORD_LENGTH - 1] = '\0';
 
 ### Verification of Buffer Overflow Fix
 
-After the fix:
-
-- Long password inputs no longer cause crashes
-- Program executes normally
-- No memory corruption observed
+After the fix, the program executes normally
 
 ![Fixed Buffer Overflow](step4/Fixed_Buffer_Overflow.png)
 
@@ -364,15 +354,13 @@ All 1000 scanned ports are closed
 
 ### Remove Non-Production, Dead, and Unused Code
 
-Findings
-
-The source code contained:
+#### The source code contained:
 
 - Hardcoded credentials (non-production backdoor)
 - Unused functions
 - Unreachable code
 
-Actions Taken
+#### Actions Taken:
 
 Removed hardcoded login:
 
