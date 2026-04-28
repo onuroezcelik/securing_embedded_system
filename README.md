@@ -325,7 +325,7 @@ This indicates that the FTP service (proftpd) was active.
 21/tcp open  ftp
 ```
 
-![nmap](nmap.png)
+![nmap](step5/nmap.png)
 
 To reduce the attack surface, all legacy services were removed from the Dockerfile:
 
@@ -357,7 +357,7 @@ nmap localhost
 Result:
 All 1000 scanned ports are closed
 
-![nmap_verified](nmap_verified.png)
+![nmap_verified](step5/nmap_verified.png)
 
 ### Remove Non-Production, Dead, and Unused Code
 
