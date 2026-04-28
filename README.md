@@ -91,7 +91,7 @@ Main risks include:
 - access control
 - logging
 
-## Step 2 - Define user role matrix
+## STEP 2 - Define user role matrix
 
 **User Role Matrix:**
 
@@ -109,7 +109,7 @@ The matrix follows the principle of least privilege, so each role only has the p
 2. **System Administrator** has full administrative access to manage devices, update software, and disable devices when necessary.
 3. **Maintenance Operator** can perform software updates but does not have access to collected data or other admin functions.
 
-## Step 3 - Handling Sensitive Information
+## STEP 3 - Handling Sensitive Information
 
 Hardcoded credentials were removed from login.c by deleting the following code sections.
 
@@ -192,7 +192,7 @@ Update start.sh to generate hashed users before login by adding:
 /app/generate_hashed_users
 ```
 
-## Step 4
+## STEP 4
 
 ### Buffer Overflow Vulnerability
 
@@ -287,7 +287,7 @@ if (strcmp(username, file_username) == 0) {
 }
 ```
 
-## Step 5
+## STEP 5
 
 ### Identify and disable legacy services
 
@@ -383,19 +383,26 @@ check_sensors(); // never executed
 ### Functional Verification
 Login functionality works correctly
 
-
-## Step 6 - Establish secure communication.
+## STEP 6 - Establish secure communication.
 
 The created files:
 - rootCA.crt and rootCA.key
 - server.key, server.csr, server.crt
 - client.key, client.csr, client.crt
 
-A file named output.txt is submitted which contains:
-- the complete output from “openssl s_client -connect server:8443 -cert client.crt -key client.key” command executed from within the client container (showing the server certificate, handshake, TLSv1.3 being used, the received software update binary etc.).
-- output from the command “cat received_update.bin |strings” including expected markers such as SOFTWAREUPDATE and CHECKSUM.
+The file "output.txt" is submitted.
 
-## Step 7 - Perform a secure software update.
+File location: step6/client/output.txt
+
+It contains:
+- output of the command `openssl s_client -connect server:8443 -cert client.crt -key client.key` executed inside the client container, showing:
+  - server certificate
+  - TLS 1.3 handshake
+  - certificate validation process
+  - received software update binary
+- output of `cat received_update.bin | strings`, including SOFTWAREUPDATE and CHECKSUM markers
+
+## STEP 7 - Perform a secure software update.
 
 A software update package was created containing the following components:
 
