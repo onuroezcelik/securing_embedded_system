@@ -93,21 +93,20 @@ Main risks include:
 
 ## STEP 2 - Define user role matrix
 
-**User Role Matrix:**
+**User Role Matrix**
 
-Based on the architecture, the following roles and functions were identified.
-The matrix follows the principle of least privilege, so each role only has the permissions necessary for its purpose.
+The following user role matrix is based on the system architecture and follows the principle of least privilege. Each user account is only assigned the functions necessary for its role.
 
-| Role                     | View Collected Data | Change Data Collection Configuration | Perform Software Update | Disable Device |
-| ------------------------ | ------------------- | ------------------------------------ | ----------------------- | -------------- |
-| **Data Analyst**         | Yes                 | No                                   | No                      | No             |
-| **System Administrator** | Yes                 | Yes                                  | Yes                     | Yes            |
-| **Maintenance Operator** | No                  | No                                   | Yes                     | No             |
+| User Account | Login | Update Software | View Data | Manage System |
+|--------------|-------|-----------------|-----------|---------------|
+| Admin        | Yes   | Yes             | Yes       | Yes           |
+| User         | Yes   | No              | Yes       | No            |
+| Client       | Yes   | Yes             | No        | No            |
 
-**Role Description:**
-1. **Data Analyst** can only access collected data for analysis purposes.
-2. **System Administrator** has full administrative access to manage devices, update software, and disable devices when necessary.
-3. **Maintenance Operator** can perform software updates but does not have access to collected data or other admin functions.
+Role Descriptions:
+- Admin: Has full access to the system, including logging in, viewing data, performing software updates, and managing the system.
+- User: Can log in and view data, but cannot update software or manage the system.
+- Client: Can log in and perform software updates, but cannot view data or manage the system.
 
 ## STEP 3 - Handling Sensitive Information
 
